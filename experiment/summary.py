@@ -1,7 +1,6 @@
 """Module for plotting the results of the experiments."""
 
 import pickle
-from concurrent.futures import ProcessPoolExecutor
 from itertools import product
 from pathlib import Path
 
@@ -11,7 +10,7 @@ from sicore import SummaryFigure  # type: ignore[import]
 from experiment.utils import Results
 
 
-def plot_main(option: str, mode: str) -> None:  # noqa: C901
+def plot_main(option: str, mode: str) -> None:
     """Plot the results of the experiments."""
     values: list[float]
     ylabel, is_null, num_seeds = "Type I Error Rate", True, 10
@@ -21,14 +20,6 @@ def plot_main(option: str, mode: str) -> None:  # noqa: C901
             values = [100, 200, 300, 400]
             result_name = lambda value, seed: f"{value}_20_0.0_{seed}.pkl"
             xlabel = "number of samples"
-        case "d":
-            values = [10, 20, 30, 40]
-            result_name = lambda value, seed: f"200_{value}_0.0_{seed}.pkl"
-            xlabel = "number of features"
-        case "hdr":
-            values = [400, 800, 1200, 1600]
-            result_name = lambda value, seed: f"100_{value}_0.0_{seed}.pkl"
-            xlabel = "number of features"
         case "delta":
             values = [0.2, 0.4, 0.6, 0.8]
             result_name = lambda value, seed: f"200_20_{value}_{seed}.pkl"
@@ -53,10 +44,6 @@ def plot_main(option: str, mode: str) -> None:  # noqa: C901
         match mode:
             case "n":
                 n_, d_ = value, 20
-            case "d":
-                n_, d_ = 200, value
-            case "hdr":
-                n_, d_ = 100, value
             case "delta":
                 n_, d_ = 200, 20
 
@@ -79,9 +66,8 @@ def plot_main(option: str, mode: str) -> None:  # noqa: C901
 
 
 if __name__ == "__main__":
-    with ProcessPoolExecutor(max_workers=4) as executor:
-        for option, mode in product(
-            ["op1", "op2", "all_cv"],
-            ["n", "delta"],
-        ):
-            executor.submit(plot_main, *(option, mode))
+    for option, mode in product(
+        ["op1", "op2", "all_cv"],
+        ["n", "delta"],
+    ):
+        plot_main(option, mode)
