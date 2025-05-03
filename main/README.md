@@ -4,7 +4,7 @@ It provides (i) our implementation of the proposed method which is applicable to
 
 ## Demonstration
 The implementation we developed can be interactively executed using the provided `demonstration.ipynb` file.
-This file contains a step-by-step guide on how to use the package and how to apply the proposed method to a given data analysis pipeline.
+This file contains a step-by-step guide on how to use the package and how to apply the proposed method to a given feature selection pipeline.
 
 ## Installation & Requirements
 This package has the following dependencies:

@@ -13,7 +13,15 @@ import numpy as np
 from sicore import SelectiveInferenceResult  # type: ignore[import]
 from tqdm import tqdm  # type: ignore[import]
 
-from experiment.utils import Results, option1, option1_multi, option2, option2_multi
+from experiment.utils import (
+    Results,
+    option1,
+    option1_multi,
+    option2,
+    option2_multi,
+    option3,
+    option3_multi,
+)
 
 current_dir = Path(__file__).resolve().parent
 sys.path.append(str(current_dir / ".."))
@@ -56,7 +64,7 @@ class MainExperimentPipeline:
         results = [result for result in results if result is not None]
         return results[: self.num_results]
 
-    def iter_experiment(
+    def iter_experiment(  # noqa: C901
         self,
         seed: int,
     ) -> tuple[SelectiveInferenceResult, float, float] | None:
@@ -79,8 +87,13 @@ class MainExperimentPipeline:
                     manager = option1()
                 case "op2":
                     manager = option2()
+                case "op3":
+                    manager = option3()
                 case "all_cv":
                     manager = option1_multi() | option2_multi()
+                    manager.tune(X, y, random_state=seed)
+                case "all_cv_hdr":
+                    manager = option2_multi() | option3_multi()
                     manager.tune(X, y, random_state=seed)
 
             M, _ = manager(X, y)

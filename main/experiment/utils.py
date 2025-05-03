@@ -10,7 +10,7 @@ from typing_extensions import Self
 if TYPE_CHECKING:
     from sicore import SelectiveInferenceResult  # type: ignore[import]
 
-from si4automl import (
+from si4pipeline import (
     PipelineManager,
     construct_pipelines,
     cook_distance,
@@ -90,6 +90,23 @@ def option2() -> PipelineManager:
     return construct_pipelines(output=M)
 
 
+def option3() -> PipelineManager:
+    """Pipeline manager for only one option 3 pipeline."""
+    X, y = initialize_dataset()
+    y = mean_value_imputation(X, y)
+
+    M = marginal_screening(X, y, 5)
+    X = extract_features(X, M)
+
+    O = soft_ipod(X, y, 0.02)
+    X, y = remove_outliers(X, y, O)
+
+    M1 = stepwise_feature_selection(X, y, 3)
+    M2 = lasso(X, y, 0.08)
+    M = union(M1, M2)
+    return construct_pipelines(output=M)
+
+
 def option1_multi() -> PipelineManager:
     """Pipeline manager for multiple option 1 pipelines."""
     X, y = initialize_dataset()
@@ -121,6 +138,23 @@ def option2_multi() -> PipelineManager:
     M1 = stepwise_feature_selection(X, y, [2, 3])
     M2 = lasso(X, y, [0.08, 0.12])
     M = intersection(M1, M2)
+    return construct_pipelines(output=M)
+
+
+def option3_multi() -> PipelineManager:
+    """Pipeline manager for multiple option 3 pipelines."""
+    X, y = initialize_dataset()
+    y = mean_value_imputation(X, y)
+
+    M = marginal_screening(X, y, [3, 5])
+    X = extract_features(X, M)
+
+    O = soft_ipod(X, y, [0.02, 0.018])
+    X, y = remove_outliers(X, y, O)
+
+    M1 = stepwise_feature_selection(X, y, [2, 3])
+    M2 = lasso(X, y, [0.08, 0.12])
+    M = union(M1, M2)
     return construct_pipelines(output=M)
 
 
