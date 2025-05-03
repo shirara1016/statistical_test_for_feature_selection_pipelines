@@ -18,8 +18,8 @@ pip install tqdm
 
 ## Reproducibility
 To reproduce the results, please see the following instructions after installation step.
-The results will be saved in "./results_*" folder as pickle file.
-The plots will be saved in "./figures/main" folder as pdf file, which we have already got in advance.
+The results will be saved in `./results_*` folder as pickle file.
+The plots will be saved in `./figures/main` folder as pdf file, which we have already got in advance.
 
 For reproducing the figures in the left column of Figure 3 (type I error rate).
 ```bash
